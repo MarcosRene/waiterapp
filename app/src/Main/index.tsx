@@ -10,6 +10,7 @@ import {
 import { Header } from '../components/Header';
 import { Categories } from '../components/Categories';
 import { Menu } from '../components/Menu';
+import { Button } from '../components/Button';
 
 export function Main() {
   return (
@@ -26,7 +27,11 @@ export function Main() {
       </Container>
 
       <Footer>
-        <FooterContainer />
+        <FooterContainer>
+          <Button onPress={() => alert('Pressinou')}>
+            Novo pedido
+          </Button>
+        </FooterContainer>
       </Footer>
     </>
   );
