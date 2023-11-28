@@ -28,10 +28,11 @@ import {
 export function Main() {
   const [selectedTable, setSelectedTable] = useState('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isTableModalVisible, setIsTableModalVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isTableModalVisible, setIsTableModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -43,6 +44,20 @@ export function Main() {
       setIsLoading(false);
     });
   }, []);
+
+
+  async function handleSelectCategory(categoryId: string) {
+    const route = categoryId
+      ? `/categories/${categoryId}/products`
+      : '/products';
+
+    setIsLoadingProducts(true);
+
+    const { data } = await api.get(route);
+
+    setProducts(data);
+    setIsLoadingProducts(false);
+  }
 
   function handleSaveTable(table: string) {
     setSelectedTable(table);
@@ -124,21 +139,31 @@ export function Main() {
             <CategoriesContainer>
               <Categories
                 categories={categories}
+                onSelectCategory={handleSelectCategory}
               />
             </CategoriesContainer>
 
-            {products.length > 0 ? (
-              <MenuContainer>
-                <Menu onAddToCart={handleAddToCart} products={products} />
-              </MenuContainer>
-            ) : (
+            {isLoadingProducts ? (
               <CenteredContainer>
-                <Empty />
-                <Text color="#666666" style={{ marginTop: 24 }}>
-                  Nenhum produto foi encotrado!
-                </Text>
+                <ActivityIndicator color="#D73035" size="large" />
               </CenteredContainer>
+            ): (
+              <>
+                {products.length > 0 ? (
+                  <MenuContainer>
+                    <Menu onAddToCart={handleAddToCart} products={products} />
+                  </MenuContainer>
+                ) : (
+                  <CenteredContainer>
+                    <Empty />
+                    <Text color="#666666" style={{ marginTop: 24 }}>
+                  Nenhum produto foi encotrado!
+                    </Text>
+                  </CenteredContainer>
+                )}
+              </>
             )}
+
           </>
         )}
       </Container>
