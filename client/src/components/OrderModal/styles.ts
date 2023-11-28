@@ -60,10 +60,11 @@ export const OrderDetails = styled.div`
   margin-top: 32px;
 
   > strong {
-    margin-top: 16px;
+    margin-bottom: 16px;
     font-size: 14px;
     font-weight: 500;
     opacity: 0.8;
+    display: block;
   }
 
    .total {
@@ -143,5 +144,10 @@ export const Actions = styled.footer`
     border: 0;
     background: transparent;
     color: #B73035;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
