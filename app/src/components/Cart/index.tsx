@@ -64,7 +64,7 @@ export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder }: CartProp
               <ProductContainer>
                 <Image
                   source={{
-                    uri: `http://rn2qxky.anonymous.8081.exp.direct:3333/uploads/${cartItem.product.imagePath}`
+                    uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${cartItem.product.imagePath}`
                   }}
                 />
 
