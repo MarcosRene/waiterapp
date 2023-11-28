@@ -41,6 +41,11 @@ export function OrderModal({ visible, order, onClose, onCancelOrder, isLoading, 
     'DONE': {icon: '✅', title: 'Pronto!'},
   };
 
+  const renderLabelButton = {
+    'WAITING': {icon: '👨‍🍳', label: 'Fila de espera'},
+    'IN_PRODUCTION': {icon: '✅', label: 'Concluir pedido'},
+  };
+
   const total = order.products.reduce((total, { product, quantity }) => {
     return total + (product.price * quantity);
   }, 0);
@@ -95,8 +100,8 @@ export function OrderModal({ visible, order, onClose, onCancelOrder, isLoading, 
         <Actions>
           {order.status !== 'DONE' && (
             <button type="button" onClick={onChangeOrderStatus} disabled={isLoading}>
-              <span>👨‍🍳</span>
-              <strong>Iniciar produção</strong>
+              <span>{renderLabelButton[order.status].icon}</span>
+              <strong>{renderLabelButton[order.status].label}</strong>
             </button>
           )}
 
