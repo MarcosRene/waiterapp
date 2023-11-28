@@ -22,7 +22,7 @@ export const Order = model('Order', new Schema({
         required: true,
         ref: 'Product'
       },
-      quantify: {
+      quantity: {
         type: Number,
         default: 1
       }
