@@ -4,6 +4,7 @@ import { formatCurrency } from '../../utils/formatCurrency';
 
 import { Product } from '../../types/Product';
 
+import { Button } from '../Button';
 import { Text } from '../Text';
 import { Close } from '../Icons/Close';
 
@@ -18,17 +19,26 @@ import {
   FooterContainer,
   PriceContainer
 } from './styles';
-import { Button } from '../Button';
-
 interface ProductModalProps {
   visible: boolean;
   onClose: () => void;
-  product: Product | null
+  product: Product | null,
+  onAddToCart: (product: Product) => void
 }
 
-export function ProductModal({ visible, onClose, product }: ProductModalProps) {
+export function ProductModal({
+  visible,
+  onClose,
+  product,
+  onAddToCart
+}: ProductModalProps) {
   if (!product) {
     return null;
+  }
+
+  function handleAddToCart() {
+    onAddToCart(product!);
+    onClose();
   }
 
   return (
@@ -82,7 +92,7 @@ export function ProductModal({ visible, onClose, product }: ProductModalProps) {
             <Text size={20} weight={600}>{formatCurrency(product.price)}</Text>
           </PriceContainer>
 
-          <Button onPress={() => alert('Adicionado')}>Adicionar ao pedido</Button>
+          <Button onPress={handleAddToCart}>Adicionar ao pedido</Button>
         </FooterContainer>
       </Footer>
     </Modal>

@@ -8,6 +8,7 @@ import { MinusCircle } from '../Icons/MinusCircle';
 import { Text } from '../Text';
 
 import { CartItem } from '../../types/CartItem';
+import { Product } from '../../types/Product';
 
 import {
   Item,
@@ -21,9 +22,15 @@ import {
 
 interface CartProps {
   cartItems: CartItem[];
+  onAdd: (product: Product) => void;
+  onDecrement: (product: Product) => void;
 }
 
-export function Cart({ cartItems }: CartProps) {
+export function Cart({ cartItems, onAdd, onDecrement }: CartProps) {
+  const total = cartItems.reduce((acc, cartItem) => {
+    return acc + (cartItem.quantity * cartItem.product.price);
+  }, 0);
+
   return (
     <>
       {cartItems.length > 0 && (
@@ -52,11 +59,14 @@ export function Cart({ cartItems }: CartProps) {
               </ProductContainer>
 
               <Actions>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginRight: 24 }}
+                  onPress={() => onAdd(cartItem.product)}
+                >
                   <PlusCircle />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginLeft: 24 }}>
+                <TouchableOpacity onPress={() => onDecrement(cartItem.product)}>
                   <MinusCircle />
                 </TouchableOpacity>
               </Actions>
@@ -70,7 +80,7 @@ export function Cart({ cartItems }: CartProps) {
           {cartItems.length > 0 ? (
             <>
               <Text color="#666666">Total</Text>
-              <Text size={20} weight={600}>{formatCurrency(120)}</Text>
+              <Text size={20} weight={600}>{formatCurrency(total)}</Text>
             </>
           ): (
             <Text color="#999999">Seu carrinho está vazio</Text>
