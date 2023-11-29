@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import socketIO from 'socket.io-client';
 
 import api from '../../utils/api';
 
@@ -12,11 +13,20 @@ export function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
+    const socket = socketIO('http://localhost:3333', {
+      transports: ['websocket']
+    });
+
+    socket.on('orders@new', (order) => {
+      setOrders(prevState => prevState.concat(order));
+    });
+  }, []);
+
+  useEffect(() => {
     api.get('/orders').then(({ data }) => {
       setOrders(data);
     });
   }, []);
-
 
   const waiting = orders.filter(order => order.status === 'WAITING');
   const inProduction = orders.filter(order => order.status === 'IN_PRODUCTION');
